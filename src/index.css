@@ -1,0 +1,494 @@
+/* ============================================
+   FMV Web Game — Cinema UI
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
+:root {
+  --color-bg: #0a0a0f;
+  --color-surface: #12121a;
+  --color-accent: #e94560;
+  --color-accent-glow: rgba(233, 69, 96, 0.4);
+  --color-text: #f0f0f0;
+  --color-text-dim: #8888a0;
+  --color-gold: #ffd700;
+  --color-cyan: #00d4ff;
+  --cinema-radius: 12px;
+  --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- App Layout ---- */
+.app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, #1a1a2e 0%, var(--color-bg) 70%);
+}
+
+/* ---- Cinema Screen ---- */
+.cinema {
+  width: 100%;
+  max-width: 960px;
+  padding: 0 24px;
+}
+
+.cinema__screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: var(--cinema-radius);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 120px rgba(233, 69, 96, 0.08);
+}
+
+.cinema__frame {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--cinema-radius);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ---- Video ---- */
+.fmv-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* ---- Title Screen ---- */
+.title-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(233, 69, 96, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 60%),
+    linear-gradient(180deg, #0d0d18 0%, #1a1a2e 50%, #0d0d18 100%);
+  animation: fadeIn 0.8s var(--transition-smooth);
+}
+
+.title-screen__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+}
+
+.title-screen__content {
+  position: relative;
+  text-align: center;
+  z-index: 2;
+}
+
+.title-screen__badge {
+  display: inline-block;
+  padding: 4px 16px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--color-accent);
+  border: 1px solid rgba(233, 69, 96, 0.3);
+  border-radius: 100px;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.title-screen__title {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 16px;
+}
+
+.title-screen__title-line {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.title-screen__title-line--accent {
+  font-size: 64px;
+  color: var(--color-accent);
+  text-shadow: 0 0 40px var(--color-accent-glow);
+}
+
+.title-screen__subtitle {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-text-dim);
+  max-width: 320px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.title-screen__play {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 36px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #fff;
+  background: var(--color-accent);
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-smooth);
+  box-shadow: 0 4px 24px var(--color-accent-glow);
+}
+
+.title-screen__play:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 32px rgba(233, 69, 96, 0.6);
+}
+
+.title-screen__play:active {
+  transform: scale(0.98);
+}
+
+.title-screen__play svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---- Choice Overlay ---- */
+.choice-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10%;
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    rgba(0, 0, 0, 0.4) 70%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+  animation: fadeIn 0.6s var(--transition-smooth);
+}
+
+.choice-container {
+  text-align: center;
+}
+
+.choice-prompt {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+  animation: slideUp 0.5s var(--transition-smooth) 0.2s both;
+}
+
+.choice-buttons {
+  display: flex;
+  gap: 16px;
+  animation: slideUp 0.5s var(--transition-smooth) 0.35s both;
+}
+
+.choice-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 32px;
+  min-width: 160px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s var(--transition-smooth);
+  overflow: hidden;
+}
+
+.choice-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.choice-btn--leave::before {
+  background: linear-gradient(135deg, rgba(233, 69, 96, 0.2), transparent);
+}
+
+.choice-btn--look::before {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), transparent);
+}
+
+.choice-btn:hover::before {
+  opacity: 1;
+}
+
+.choice-btn:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.choice-btn--leave:hover {
+  border-color: rgba(233, 69, 96, 0.4);
+  box-shadow: 0 12px 32px rgba(233, 69, 96, 0.2);
+}
+
+.choice-btn--look:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: 0 12px 32px rgba(0, 212, 255, 0.2);
+}
+
+.choice-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.choice-btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.choice-btn__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.choice-btn--leave .choice-btn__icon {
+  color: var(--color-accent);
+}
+
+.choice-btn--look .choice-btn__icon {
+  color: var(--color-cyan);
+}
+
+.choice-btn__label {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.choice-btn__desc {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 140px;
+  line-height: 1.4;
+}
+
+/* ---- End Screen ---- */
+.end-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at center, rgba(26, 26, 46, 0.95) 0%, rgba(10, 10, 15, 0.98) 100%);
+  animation: fadeIn 1s var(--transition-smooth);
+}
+
+.end-screen__content {
+  text-align: center;
+}
+
+.end-screen__badge {
+  display: inline-block;
+  padding: 4px 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--color-gold);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.end-screen__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--color-text);
+}
+
+.end-screen__desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-text-dim);
+  max-width: 300px;
+  margin: 0 auto 36px;
+  line-height: 1.6;
+}
+
+.end-screen__restart {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 28px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-smooth);
+}
+
+.end-screen__restart:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.03);
+}
+
+.end-screen__restart:active {
+  transform: scale(0.98);
+}
+
+/* ---- Debug Bar ---- */
+.debug-bar {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  padding: 6px 16px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  z-index: 100;
+}
+
+.debug-bar__state {
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.debug-bar__video {
+  color: var(--color-text-dim);
+}
+
+/* ---- Animations ---- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- Mobile Landscape ---- */
+@media (max-width: 768px) {
+  .cinema {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .cinema__screen {
+    border-radius: 0;
+    aspect-ratio: auto;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .cinema__frame {
+    border-radius: 0;
+  }
+
+  .title-screen__title-line {
+    font-size: 32px;
+  }
+
+  .title-screen__title-line--accent {
+    font-size: 44px;
+  }
+
+  .choice-btn {
+    min-width: 130px;
+    padding: 16px 24px;
+  }
+
+  .debug-bar {
+    bottom: 8px;
+  }
+}
+
+/* ---- Fullscreen ---- */
+:fullscreen .cinema,
+:-webkit-full-screen .cinema {
+  max-width: 100%;
+  padding: 0;
+}
+
+:fullscreen .cinema__screen,
+:-webkit-full-screen .cinema__screen {
+  border-radius: 0;
+  aspect-ratio: auto;
+  width: 100vw;
+  height: 100vh;
+}
